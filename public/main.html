@@ -1,0 +1,185 @@
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Maxxiconfig</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+</head>
+
+<body>
+
+
+    <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+  </script>
+
+    <div id="app">
+        <h1>
+            Maxxiconfig
+        </h1>
+        <div>
+            <label for="battery">Batterie wählen:</label>
+        </div>
+
+        <select v-model="selected">
+            <option disabled value="">Bitte Batterie wählen</option>
+            <option value="1">Maxxicharge 1.25</option>
+            <option value="2">Maxxicharge 2.5</option>
+            <option value="3">Maxxicharge 5</option>
+        </select>
+
+        <div class="row">
+            <div v-for="(string, stringIndex) in strings" class="column">
+                <h3>
+                    String {{stringIndex+1}}
+                </h3>
+                <div>
+                    <Button @click="addPanel(stringIndex)">
+                        Panel Hinzufügen
+                    </Button>
+
+                    <div v-for="(panel, panelIndex) in string" class="panel">
+                        <h4>Panel {{panelIndex+1}}</h4>
+                        <div>
+                            Leerlaufspannung: <input type="number" v-model="panel.voltIdle"> Volt
+                        </div>
+                        <div>
+                            Arbeitsspannung: <input type="number" v-model="panel.voltWork"> Volt
+                        </div>
+                        <div>
+                            Elektrische Leistung: <input type="number" v-model="panel.watt"> Watt Peak
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>
+            Prüfergebnis:
+        </h2>
+        <div class="error">
+            <li v-for="item in errors">
+                {{item}}
+            </li>
+        </div>
+        <div v-if="errors.length === 0">
+            Sieht gut aus! Die Gesamtleistung aller Strings entspricht {{sumWatt}} Wp.
+        </div>
+    </div>
+
+
+    <script type="module">
+        import {
+            createApp
+        } from 'vue'
+        createApp({
+            data() {
+                return {
+                    selected: '1',
+                    strings: [
+                        []
+                    ],
+                    errors: ['Noch nicht geprüft.']
+                }
+
+            },
+            computed: {
+                sumWatt() {
+                    let sumWatt = 0;
+                    for (let i = 0; i < this.strings.length; i++) {
+                        if (this.strings[i].length == 0) continue;
+                        for (let j = 0; j < this.strings[i].length; j++) {
+                            sumWatt += this.strings[i][j].watt;
+                        }
+                    }
+                    return sumWatt;
+                }
+            },
+            methods: {
+                addPanel(stringIndex) {
+                    this.strings[stringIndex].push({
+                        voltIdle: 0,
+                        voltWork: 0,
+                        watt: 0
+                    })
+                },
+                check() {
+                    this.errors = [];
+                    // check values per string
+                    let stringSums = [];
+                    for (let i = 0; i < this.strings.length; i++) {
+                        if (this.strings[i].length == 0) continue;
+                        let sumVoltageIdle = 0;
+                        let sumVoltageWork = 0;
+                        let sumWatt = 0;
+                        for (let j = 0; j < this.strings[i].length; j++) {
+                            sumVoltageIdle += this.strings[i][j].voltIdle;
+                            sumVoltageWork += this.strings[i][j].voltWork;
+                            sumWatt += this.strings[i][j].watt;
+                        }
+
+                        stringSums.push(
+                            {
+                                sumVoltageIdle: sumVoltageIdle,
+                                sumVoltageWork: sumVoltageWork,
+                                sumWatt: sumWatt
+                            }
+                        );
+
+                        if (sumVoltageWork < 60) {
+                            this.errors.push("Nicht genug Arbeitsspannung an String " + (i + 1) + ": " + sumVoltageWork + " Volt. (< 60 Volt)");
+                        }
+
+                        if (sumVoltageIdle > 150) {
+                            this.errors.push("Zu hohe Lehrlaufspannung  an String " + (i + 1) + ": " + sumVoltageIdle + " Volt. (> 150 Volt)");
+                        }
+
+                        if (sumWatt > 1000) {
+                            this.errors.push("Zu hohe elektrische Leistung  an String " + (i + 1) + ": " + sumWatt + " Wp. (> 1000 Wp)");
+                        }
+                    }
+                    if (!stringSums.every(checkEqual)) {
+                        this.errors.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher müssen die einzelnen Strings immer dieselbe Spannung aufweisen.");
+                    }
+                    function checkEqual(sum) {
+                        return sum.sumVoltageIdle == stringSums[0].sumVoltageIdle && sum.sumVoltageWork == stringSums[0].sumVoltageWork && sum.sumWatt == stringSums[0].sumWatt;
+                    }
+                }
+            },
+            watch: {
+                selected(newSelection, oldSelection) {
+                    if (newSelection == 1) {
+                        this.strings = [this.strings[0]]
+                    }
+                    if (newSelection == 2) {
+                        this.strings = [this.strings[0], (this.strings.length >= 2) ? this.strings[1] : []]
+                    }
+                    if (newSelection == 3) {
+                        this.strings = [this.strings[0], (this.strings.length >= 2) ? this.strings[1] : [],
+                        []
+                        ]
+                    }
+                },
+                strings: {
+                    handler(newStrings, oldStrings) {
+                        this.check()
+                    },
+                    deep: true //check on any change
+                }
+            }
+
+        }).mount('#app')
+
+    </script>
+</body>
+</html>

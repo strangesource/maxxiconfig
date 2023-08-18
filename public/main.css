@@ -1,0 +1,17 @@
+.row {
+    display: flex;
+  }
+  
+  .column {
+    flex: 50%;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .panel {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid silver;
+  }
