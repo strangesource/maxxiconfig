@@ -1,17 +1,21 @@
+[v-cloak] {
+    display: none;
+}
+
 .row {
     display: flex;
-  }
-  
-  .column {
+}
+
+.column {
     flex: 50%;
-  }
-  
-  .error {
+}
+
+.error {
     color: red;
-  }
-  
-  .panel {
+}
+
+.panel {
     margin: 10px;
     padding: 10px;
     border: 1px solid silver;
-  }
+}
