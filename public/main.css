@@ -2,20 +2,12 @@
     display: none;
 }
 
-.row {
-    display: flex;
-}
-
-.column {
-    flex: 50%;
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 1rem;
 }
 
 .error {
     color: red;
-}
-
-.panel {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid silver;
 }

@@ -8,8 +8,8 @@
     <meta name="googlebot" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="main.css">
 
@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body data-bs-theme="dark">
     <div v-cloak id="app">
         <h1>
             Maxxiconfig
@@ -26,37 +26,41 @@
             Dieses Tool hilft bei der Konfiguration eines Maxxicharge Batteriespeichers. Bitte lesen Sie
             <a href="https://github.com/strangesource/maxxiconfig">das README</a> vor der Verwendung.
         </p>
-        <div>
+        <div class="m-1">
             <label for="battery">Batterie wählen:</label>
         </div>
 
-        <select v-model="selected">
+        <select class="form-select m-1" v-model="selected">
             <option disabled value="">Bitte Batterie wählen</option>
             <option value="1">Maxxicharge 1.25</option>
             <option value="2">Maxxicharge 2.5</option>
             <option value="3">Maxxicharge 5</option>
         </select>
 
-        <div class="row">
-            <div v-for="(string, stringIndex) in strings" class="column">
-                <h3>
-                    String {{stringIndex+1}}
-                </h3>
-                <div>
-                    <Button @click="addPanel(stringIndex)">
-                        Panel Hinzufügen
-                    </Button>
+        <div class="container">
+            <div class="row">
+                <div v-for="(string, stringIndex) in strings" class="col">
+                    <h3>
+                        String {{stringIndex+1}}
+                    </h3>
+                    <div>
+                        <Button type="button" class="btn btn-primary" @click="addPanel(stringIndex)">
+                            Panel Hinzufügen
+                        </Button>
 
-                    <div v-for="(panel, panelIndex) in string" class="panel">
-                        <h4>Panel {{panelIndex+1}}</h4>
-                        <div>
-                            Leerlaufspannung: <input type="number" v-model="panel.voltIdle"> Volt
-                        </div>
-                        <div>
-                            Arbeitsspannung: <input type="number" v-model="panel.voltWork"> Volt
-                        </div>
-                        <div>
-                            Elektrische Leistung: <input type="number" v-model="panel.watt"> Watt Peak
+                        <div v-for="(panel, panelIndex) in string" class="card m-2" style="width: 22rem;">
+                            <div class="card-body">
+                                <div class="card-title">Panel {{panelIndex+1}}</div>
+
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Leerlaufspannung: <input type="number"
+                                            v-model="panel.voltIdle"> Volt</li>
+                                    <li class="list-group-item"> Arbeitsspannung: <input type="number"
+                                            v-model="panel.voltWork"> Volt</li>
+                                    <li class="list-group-item">Elektrische Leistung: <input type="number"
+                                            v-model="panel.watt"> Watt Peak</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,6 +78,10 @@
             Sieht gut aus! Die Gesamtleistung aller Strings entspricht {{sumWatt}} Wp.
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <script src="app.js"></script>
 </body>
 
