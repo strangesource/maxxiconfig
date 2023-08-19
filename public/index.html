@@ -1,4 +1,5 @@
 <html data-bs-theme="dark">
+
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Maxxiconfig</title>
@@ -68,12 +69,18 @@
         <h2>
             Prüfergebnis:
         </h2>
-        <div class="error">
-            <li v-for="item in errors">
-                {{item}}
-            </li>
+        <div v-if="errors.length !== 0" class="alert alert-danger d-flex align-items-center" role="alert">
+            <ul class="m-0">
+                <li v-for="item in uniqueErrors" v-html="item"></li>
+            </ul>
         </div>
-        <div v-if="errors.length === 0">
+        <div v-if="warnings.length !== 0" class="alert alert-warning d-flex align-items-center" role="alert">
+            <ul class="m-0">
+                <li v-for="item in uniqueWarnings" v-html="item"></li>
+            </ul>
+        </div>
+
+        <div v-if="errors.length === 0" class="alert alert-success d-flex align-items-center">
             Sieht gut aus! Die Gesamtleistung aller Strings entspricht {{sumWatt}} Wp.
         </div>
     </div>

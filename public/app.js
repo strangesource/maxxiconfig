@@ -7,7 +7,8 @@ createApp({
             strings: [
                 []
             ],
-            errors: ['Noch nicht geprüft.']
+            errors: ['Noch nicht geprüft.'],
+            warnings: []
         }
 
     },
@@ -21,6 +22,12 @@ createApp({
                 }
             }
             return sumWatt;
+        },
+        uniqueWarnings() {
+            return [...new Set(this.warnings)];
+        },
+        uniqueErrors() {
+            return [...new Set(this.errors)];
         }
     },
     methods: {
@@ -33,6 +40,7 @@ createApp({
         },
         check() {
             this.errors = [];
+            this.warnings = [];
             // check values per string
             let stringSums = [];
             for (let i = 0; i < this.strings.length; i++) {
@@ -44,6 +52,14 @@ createApp({
                     sumVoltageIdle += this.strings[i][j].voltIdle;
                     sumVoltageWork += this.strings[i][j].voltWork;
                     sumWatt += this.strings[i][j].watt;
+                    for (let k = j; k < this.strings[i].length; k++) {
+                        if (j == k) continue;
+                        if (this.strings[i][j].voltIdle != this.strings[i][k].voltIdle ||
+                            this.strings[i][j].voltWork != this.strings[i][k].voltWork ||
+                            this.strings[i][j].watt != this.strings[i][k].watt) {
+                            this.warnings.push("Die Werte der Module in String "  + (i + 1) + " sollten innerhalb des String identisch sein. Abweichungen können zu Leistungsverlusten führen.");
+                        }
+                    }
                 }
 
                 stringSums.push(
@@ -67,7 +83,7 @@ createApp({
                 }
             }
             if (!stringSums.every(checkEqual)) {
-                this.errors.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher müssen die einzelnen Strings immer dieselbe Spannung aufweisen.");
+                this.warnings.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher sollten die einzelnen Strings immer dieselbe Spannung aufweisen um Leistungsverluste zu vermeiden. (<a href=\"https://www.maxxisun.de/post/welche-solarmodule-kann-ich-an-maxxicharge-anschlie%C3%9Fen?commentId=44329006-f6b6-4aef-9b55-1de2b06c8ba3\">Quelle</a>)");
             }
             function checkEqual(sum) {
                 return sum.sumVoltageIdle == stringSums[0].sumVoltageIdle && sum.sumVoltageWork == stringSums[0].sumVoltageWork && sum.sumWatt == stringSums[0].sumWatt;
