@@ -32,20 +32,17 @@ createApp({
     },
     methods: {
         addPanel(stringIndex) {
-            let numberPanelsInString = this.strings[stringIndex].length;
-            if( numberPanelsInString > 0){
-                this.strings[stringIndex].push({
-                    voltIdle: this.strings[stringIndex][numberPanelsInString-1].voltIdle,
-                    voltWork: this.strings[stringIndex][numberPanelsInString-1].voltWork,
-                    watt: this.strings[stringIndex][numberPanelsInString-1].watt
-                })
-                return;
-            }
             this.strings[stringIndex].push({
                 voltIdle: 0,
                 voltWork: 0,
                 watt: 0
             })
+        },
+        removePanel(stringIndex, panelIndex) {
+            this.strings[stringIndex].splice(panelIndex, 1);
+        },
+        duplicatePanel(stringIndex, panelIndex) {
+            this.strings[stringIndex].splice(panelIndex, 0, JSON.parse(JSON.stringify(this.strings[stringIndex][panelIndex])));
         },
         check() {
             this.errors = [];

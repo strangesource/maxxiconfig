@@ -59,6 +59,12 @@
                                             v-model="panel.voltWork"> Volt</li>
                                     <li class="list-group-item">Elektrische Leistung: <input type="number"
                                             v-model="panel.watt"> Watt Peak</li>
+                                    <li class="list-group-item"> 
+                                        <button type="button" class="btn btn-danger me-2"
+                                            @click="removePanel(stringIndex, panelIndex)">Entfernen</button>
+                                            <button type="button" class="btn btn-secondary me-2"
+                                            @click="duplicatePanel(stringIndex, panelIndex)">Duplizieren</button>
+                                         </li>
                                 </ul>
                             </div>
                         </div>
