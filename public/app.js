@@ -32,6 +32,15 @@ createApp({
     },
     methods: {
         addPanel(stringIndex) {
+            let numberPanelsInString = this.strings[stringIndex].length;
+            if( numberPanelsInString > 0){
+                this.strings[stringIndex].push({
+                    voltIdle: this.strings[stringIndex][numberPanelsInString-1].voltIdle,
+                    voltWork: this.strings[stringIndex][numberPanelsInString-1].voltWork,
+                    watt: this.strings[stringIndex][numberPanelsInString-1].watt
+                })
+                return;
+            }
             this.strings[stringIndex].push({
                 voltIdle: 0,
                 voltWork: 0,
