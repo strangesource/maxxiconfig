@@ -18,15 +18,15 @@ createApp({
 
     },
     computed: {
-        sumWatt() {
-            let sumWatt = 0;
+        overallWatt() {
+            let sum = 0;
             for (let i = 0; i < this.strings.length; i++) {
                 if (this.strings[i].length == 0) continue;
                 for (let j = 0; j < this.strings[i].length; j++) {
-                    sumWatt += this.strings[i][j].watt;
+                    sum += this.strings[i][j].watt;
                 }
             }
-            return sumWatt;
+            return sum;
         },
         uniqueWarnings() {
             return [...new Set(this.warnings)];
@@ -48,6 +48,29 @@ createApp({
         },
         duplicatePanel(stringIndex, panelIndex) {
             this.strings[stringIndex].splice(panelIndex, 0, JSON.parse(JSON.stringify(this.strings[stringIndex][panelIndex])));
+        },
+        sumWatt(stringIndex) {
+            let sum = 0;
+            for (let j = 0; j < this.strings[stringIndex].length; j++) {
+                sum += this.strings[stringIndex][j].watt;
+            }
+
+            return sum;
+        },
+        sumVoltageIdle(stringIndex) {
+            let sum = 0;
+            console.log(stringIndex);
+            for (let j = 0; j < this.strings[stringIndex].length; j++) {
+                sum += this.strings[stringIndex][j].voltIdle;
+            }
+            return sum;
+        },
+        sumVoltageWork(stringIndex) {
+            let sum = 0;
+            for (let j = 0; j < this.strings[stringIndex].length; j++) {
+                sum += this.strings[stringIndex][j].voltWork;
+            }
+            return sum;
         },
         check() {
             this.errors = [];

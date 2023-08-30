@@ -43,6 +43,11 @@
                     <h3>
                         String {{stringIndex+1}}
                     </h3>
+                    <div v-if="string.length > 0">
+                        <div>Leerlaufspannung (Voc): {{ sumVoltageIdle(stringIndex).toFixed(2) }} V</div>
+                        <div>Arbeitsspannung (Vmp): {{ sumVoltageWork(stringIndex).toFixed(2) }} V</div>
+                        <div>Elektrische Leistung: {{ sumWatt(stringIndex) }} Wp</div>
+                    </div>
                     <div>
                         <Button type="button" class="btn btn-primary" @click="addPanel(stringIndex)">
                             Panel Hinzufügen
@@ -53,18 +58,18 @@
                                 <div class="card-title">Panel {{panelIndex+1}}</div>
 
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">Leerlaufspannung: <input type="number"
+                                    <li class="list-group-item">Leerlaufspannung (Voc): <input type="number"
                                             v-model="panel.voltIdle"> Volt</li>
-                                    <li class="list-group-item"> Arbeitsspannung: <input type="number"
+                                    <li class="list-group-item"> Arbeitsspannung (Vmp): <input type="number"
                                             v-model="panel.voltWork"> Volt</li>
                                     <li class="list-group-item">Elektrische Leistung: <input type="number"
                                             v-model="panel.watt"> Watt Peak</li>
-                                    <li class="list-group-item"> 
+                                    <li class="list-group-item">
                                         <button type="button" class="btn btn-danger me-2"
                                             @click="removePanel(stringIndex, panelIndex)">Entfernen</button>
-                                            <button type="button" class="btn btn-secondary me-2"
+                                        <button type="button" class="btn btn-secondary me-2"
                                             @click="duplicatePanel(stringIndex, panelIndex)">Duplizieren</button>
-                                         </li>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -87,7 +92,7 @@
         </div>
 
         <div v-if="errors.length === 0" class="alert alert-success d-flex align-items-center">
-            Sieht gut aus! Die Gesamtleistung aller Strings entspricht {{sumWatt}} Wp.
+            Sieht gut aus! Die Gesamtleistung aller Strings entspricht {{overallWatt}} Wp.
         </div>
     </div>
 
