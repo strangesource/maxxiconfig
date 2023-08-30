@@ -1,5 +1,10 @@
 const { createApp } = Vue;
 
+const MAX_VOLTAGE_IDLE = 150;
+const MIN_VOLTAGE_WORK = 60;
+const MAX_POWER_PER_STRING = 1000;
+
+
 createApp({
     data() {
         return {
@@ -63,7 +68,7 @@ createApp({
                         if (this.strings[i][j].voltIdle != this.strings[i][k].voltIdle ||
                             this.strings[i][j].voltWork != this.strings[i][k].voltWork ||
                             this.strings[i][j].watt != this.strings[i][k].watt) {
-                            this.warnings.push("Die Werte der Module in String "  + (i + 1) + " sollten innerhalb des String identisch sein. Abweichungen können zu Leistungsverlusten führen.");
+                            this.warnings.push("Die Werte der Module in String " + (i + 1) + " sollten innerhalb des String identisch sein. Abweichungen können zu Leistungsverlusten führen.");
                         }
                     }
                 }
@@ -76,16 +81,16 @@ createApp({
                     }
                 );
 
-                if (sumVoltageWork < 60) {
-                    this.errors.push("Nicht genug Arbeitsspannung an String " + (i + 1) + ": " + sumVoltageWork + " Volt. (< 60 Volt)");
+                if (sumVoltageWork < MIN_VOLTAGE_WORK) {
+                    this.errors.push("Nicht genug Arbeitsspannung an String " + (i + 1) + ": " + sumVoltageWork + " Volt. (< " + MIN_VOLTAGE_WORK + " Volt)");
                 }
 
-                if (sumVoltageIdle > 150) {
-                    this.errors.push("Zu hohe Lehrlaufspannung  an String " + (i + 1) + ": " + sumVoltageIdle + " Volt. (> 150 Volt)");
+                if (sumVoltageIdle > MAX_VOLTAGE_IDLE) {
+                    this.errors.push("Zu hohe Lehrlaufspannung  an String " + (i + 1) + ": " + sumVoltageIdle + " Volt. (> " + MAX_VOLTAGE_IDLE + " Volt)");
                 }
 
-                if (sumWatt > 1000) {
-                    this.errors.push("Zu hohe elektrische Leistung  an String " + (i + 1) + ": " + sumWatt + " Wp. (> 1000 Wp)");
+                if (sumWatt > MAX_POWER_PER_STRING) {
+                    this.errors.push("Zu hohe elektrische Leistung an String " + (i + 1) + ": " + sumWatt + " Wp. (> " + MAX_POWER_PER_STRING + " Wp)");
                 }
             }
             if (!stringSums.every(checkEqual)) {
