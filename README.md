@@ -1,5 +1,5 @@
-# Maxxiconfig
-Maxxiconfig ist ein einfacher Konfigurator für die Solarmodulbelegung eines Maxxicharge Batteriespeichers. Es soll helfen, die Kompatibilität einer Konfiguration von Solarmodulen mit dem Batteriespeicher zu prüfen.
+# Maxxicharge Konfigurator
+Maxxicharge Konfigurator ist ein einfacher Konfigurator für die Solarmodulbelegung eines Maxxicharge Batteriespeichers. Es soll helfen, die Kompatibilität einer Konfiguration von Solarmodulen mit dem Batteriespeicher zu prüfen.
 
 Die aktuelle Version ist [hier](https://strangesource.github.io/maxxiconfig/) verfügbar.
 
