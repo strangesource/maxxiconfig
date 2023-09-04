@@ -1,7 +1,7 @@
 const { createApp } = Vue;
 
 const MAX_VOLTAGE_IDLE = 138;
-const MIN_VOLTAGE_WORK = 60;
+const MIN_VOLTAGE_WORK = 58.5;
 const MAX_POWER_PER_STRING = 1000;
 
 
