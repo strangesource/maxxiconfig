@@ -3,6 +3,7 @@ const { createApp } = Vue;
 const MAX_VOLTAGE_IDLE = 138;
 const MIN_VOLTAGE_WORK = 58.5;
 const MAX_POWER_PER_STRING = 1000;
+const PERCENTAGE_VOLTAGE_DEVIATION = 0.05;
 
 
 createApp({
@@ -116,11 +117,18 @@ createApp({
                     this.errors.push("Zu hohe elektrische Leistung an String " + (i + 1) + ": " + sumWatt + " Wp. (> " + MAX_POWER_PER_STRING + " Wp)");
                 }
             }
-            if (!stringSums.every(checkEqual)) {
-                this.warnings.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher sollten die einzelnen Strings immer dieselbe Spannung aufweisen um Leistungsverluste zu vermeiden. (<a href=\"https://www.maxxisun.de/post/welche-solarmodule-kann-ich-an-maxxicharge-anschlie%C3%9Fen?commentId=44329006-f6b6-4aef-9b55-1de2b06c8ba3\">Quelle</a>)");
+            if (!stringSums.every(checkDeviation)) {
+                this.warnings.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher sollten die einzelnen Strings maximal einen Spannungsunterschied von 5% aufweise um Leistungsverluste zu vermeiden.");
             }
-            function checkEqual(sum) {
-                return sum.sumVoltageIdle == stringSums[0].sumVoltageIdle && sum.sumVoltageWork == stringSums[0].sumVoltageWork && sum.sumWatt == stringSums[0].sumWatt;
+            function checkDeviation(sum) {
+                return calculateDeviation(stringSums[0].sumVoltageIdle, sum.sumVoltageIdle) <= PERCENTAGE_VOLTAGE_DEVIATION
+                    && calculateDeviation(stringSums[0].sumVoltageWork, sum.sumVoltageWork) <= PERCENTAGE_VOLTAGE_DEVIATION;
+            }
+            /**
+             * Returns the deviation of two values in percent (between 0 and 1)
+             */
+            function calculateDeviation(first, second) {
+                return Math.abs(first - second) / first;
             }
         }
     },
