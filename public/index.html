@@ -30,7 +30,7 @@
             <label for="battery">Batterie wählen:</label>
         </div>
 
-        <select class="form-select m-1" v-model="selected">
+        <select class="form-select m-1 w-auto" v-model="selected">
             <option disabled value="">Bitte Batterie wählen</option>
             <option value="1">Maxxicharge 1.25</option>
             <option value="2">Maxxicharge 2.5</option>
@@ -49,7 +49,12 @@
                         <div>Elektrische Leistung: {{ sumWatt(stringIndex) }} Wp</div>
                     </div>
                     <div>
-                        <Button type="button" class="btn btn-primary" @click="addPanel(stringIndex)">
+                        <select class="form-select m-1 w-auto" v-model="panelToAdd">
+                            <option v-for="option in panels" :key="option.name" :value="option.values">
+                                {{ option.name }}
+                            </option>
+                        </select>
+                        <Button type="button" class="btn btn-primary m-1" @click="addPanel(stringIndex)">
                             Panel Hinzufügen
                         </Button>
 

@@ -5,6 +5,33 @@ const MIN_VOLTAGE_WORK = 58.5;
 const MAX_POWER_PER_STRING = 1000;
 const PERCENTAGE_VOLTAGE_DEVIATION = 0.05;
 
+const SAMPLE_PANELS = [
+    {
+        name: "Leer",
+        values: {
+            voltIdle: 0,
+            voltWork: 0,
+            watt: 0
+        }
+    },
+    {
+        name: "JA Solar JAM54S30 415W",
+        values: {
+            voltIdle: 37.45, // Voc
+            voltWork: 31.61, // Vmp
+            watt: 415
+        }
+    },
+    {
+        name: "JA Solar JAM54S31 405W",
+        values: {
+            voltIdle: 37.23, // Voc
+            voltWork: 31.21, // Vmp
+            watt: 405
+        }
+    },
+]
+
 
 createApp({
     data() {
@@ -14,7 +41,9 @@ createApp({
                 []
             ],
             errors: ['Noch nicht geprüft.'],
-            warnings: []
+            warnings: [],
+            panels: SAMPLE_PANELS,
+            panelToAdd: SAMPLE_PANELS[0].values
         }
 
     },
@@ -38,11 +67,7 @@ createApp({
     },
     methods: {
         addPanel(stringIndex) {
-            this.strings[stringIndex].push({
-                voltIdle: 0,
-                voltWork: 0,
-                watt: 0
-            })
+            this.strings[stringIndex].push(this.panelToAdd);
         },
         removePanel(stringIndex, panelIndex) {
             this.strings[stringIndex].splice(panelIndex, 1);
@@ -118,7 +143,7 @@ createApp({
                 }
             }
             if (!stringSums.every(checkDeviation)) {
-                this.warnings.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher sollten die einzelnen Strings maximal einen Spannungsunterschied von 5% aufweise um Leistungsverluste zu vermeiden.");
+                this.errors.push("Bei dem Maxxicharge 2.5 und 5.0 Speicher sollten die einzelnen Strings maximal einen Spannungsunterschied von 5% aufweise um Leistungsverluste zu vermeiden.");
             }
             function checkDeviation(sum) {
                 return calculateDeviation(stringSums[0].sumVoltageIdle, sum.sumVoltageIdle) <= PERCENTAGE_VOLTAGE_DEVIATION
