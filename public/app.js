@@ -67,7 +67,7 @@ createApp({
     },
     methods: {
         addPanel(stringIndex) {
-            this.strings[stringIndex].push(this.panelToAdd);
+            this.strings[stringIndex].push(JSON.parse(JSON.stringify(this.panelToAdd)));
         },
         removePanel(stringIndex, panelIndex) {
             this.strings[stringIndex].splice(panelIndex, 1);
