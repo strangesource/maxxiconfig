@@ -139,7 +139,7 @@ createApp({
                 }
 
                 if (sumWatt > MAX_POWER_PER_STRING) {
-                    this.errors.push("Zu hohe elektrische Leistung an String " + (i + 1) + ": " + sumWatt + " Wp. (> " + MAX_POWER_PER_STRING + " Wp)");
+                    this.warnings.push("Zu hohe elektrische Leistung an String " + (i + 1) + ": " + sumWatt + " Wp. (> " + MAX_POWER_PER_STRING + " Wp) Laut <a href=\"https://www.maxxisun.de/post/welche-solarmodule-kann-ich-an-maxxicharge-anschlie%C3%9Fen?commentId=6a6c2794-9fc9-45b9-85c0-0958a038214c\">diesem Kommentar</a> darf dieser Wert geringfügig überschritten werden.");
                 }
             }
             if (!stringSums.every(checkDeviation)) {
