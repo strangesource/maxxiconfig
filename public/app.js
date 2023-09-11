@@ -30,6 +30,14 @@ const SAMPLE_PANELS = [
             watt: 405
         }
     },
+    {
+        name: "Meyer Burger Black 390W",
+        values: {
+            voltIdle: 44.6, // Voc
+            voltWork: 38.9, // Vmp
+            watt: 390
+        }
+    },
 ]
 
 
